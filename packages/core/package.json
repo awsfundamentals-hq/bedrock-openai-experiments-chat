@@ -1,0 +1,19 @@
+{
+  "name": "@bedrock-rag/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "sst": "^2.41.4",
+    "vitest": "^1.5.0"
+  },
+  "dependencies": {
+    "dynamoose": "^4.0.0",
+    "luxon": "^3.4.4",
+    "zod": "^3.22.4"
+  }
+}

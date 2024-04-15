@@ -1,0 +1,25 @@
+{
+  "name": "bedrock-rag",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sst dev",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove",
+    "console": "sst console",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.4",
+    "aws-cdk-lib": "2.132.1",
+    "constructs": "10.3.0",
+    "prettier": "^3.2.5",
+    "sst": "^2.41.4",
+    "typescript": "^5.4.5"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
