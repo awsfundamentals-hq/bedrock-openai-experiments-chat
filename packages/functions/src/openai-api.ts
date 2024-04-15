@@ -19,7 +19,9 @@ export const listModels = ApiHandler(async (_evt) => {
 export const submit = ApiHandler(async (evt) => {
   checkApiKey(evt);
   const { model, text: prompt } = JSON.parse(evt.body!);
+  await dynamoDbAdapter.createMessage({ text: prompt, from: 'user' });
   const text = await openAiAdapter.submitPrompt(prompt, model);
+  await dynamoDbAdapter.createMessage({ text, from: 'response' });
   return {
     statusCode: 200,
     body: JSON.stringify({ text, model }),
@@ -32,5 +34,14 @@ export const getMessages = ApiHandler(async (_evt) => {
   return {
     statusCode: 200,
     body: JSON.stringify(messages),
+  };
+});
+
+export const clearMessages = ApiHandler(async (evt) => {
+  checkApiKey(evt);
+  await dynamoDbAdapter.clearMessages();
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ message: 'Messages cleared' }),
   };
 });

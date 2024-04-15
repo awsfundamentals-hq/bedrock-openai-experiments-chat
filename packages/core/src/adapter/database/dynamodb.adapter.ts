@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { generateUUID } from '../../utils/core';
 import { ChatsEntity, ChatsModel } from './model/chats';
 import { NotesEntity, NotesModel } from './model/notes';
@@ -39,5 +40,15 @@ export class DynamoDbAdapter {
 
   async getChatMessages(chatId: string): Promise<ChatsEntity> {
     return ChatsModel.get(chatId);
+  }
+
+  async createMessage(params: { text: string; from: 'user' | 'response' }): Promise<ChatsEntity> {
+    const message = { id: generateUUID(), ...params, timestamp: DateTime.utc().toMillis() };
+    return ChatsModel.create(message);
+  }
+
+  async clearMessages(): Promise<void> {
+    const allIds = await ChatsModel.scan().attributes(['id']).exec();
+    await ChatsModel.batchDelete(allIds.map(({ id }) => id));
   }
 }

@@ -1,4 +1,4 @@
-import { DynamoDbAdapter } from '@bedrock-rag/core/adapter/database/dynamodb-notes.adapter';
+import { DynamoDbAdapter } from '@bedrock-rag/core/adapter/database/dynamodb.adapter';
 import { NotesEntity } from '@bedrock-rag/core/adapter/database/model/notes';
 import { checkApiKey } from '@bedrock-rag/core/utils/core';
 import { ApiHandler } from 'sst/node/api';

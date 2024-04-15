@@ -13,6 +13,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.274.0",
+    "luxon": "^3.4.4",
     "next": "14.2.1",
     "react": "^18",
     "react-dom": "^18",
@@ -20,6 +21,7 @@
     "tailwind-merge": "^1.14.0"
   },
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
