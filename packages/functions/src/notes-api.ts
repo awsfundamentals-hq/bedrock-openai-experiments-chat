@@ -1,9 +1,9 @@
-import { DynamoDbNotesAdapter } from '@bedrock-rag/core/adapter/database/dynamodb-notes.adapter';
+import { DynamoDbAdapter } from '@bedrock-rag/core/adapter/database/dynamodb-notes.adapter';
 import { NotesEntity } from '@bedrock-rag/core/adapter/database/model/notes';
 import { checkApiKey } from '@bedrock-rag/core/utils/core';
 import { ApiHandler } from 'sst/node/api';
 
-const notesAdapter = new DynamoDbNotesAdapter();
+const notesAdapter = new DynamoDbAdapter();
 
 export const create = ApiHandler(async (_evt) => {
   checkApiKey(_evt);

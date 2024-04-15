@@ -1,26 +1,34 @@
 // components/ChatComponent.js
-import { listModels, submitPrompt } from '@/services/openai-api';
-import { useState } from 'react';
+import { ChatMessage, getMessages, listModels, submitPrompt } from '@/services/openai-api';
+import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 function ChatComponent() {
-  const [messages, setMessages] = useState<{ text: string; model: string; from: string; isLoading?: boolean }[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('gpt-3.5-turbo-0613');
 
   const { data: models = [], isLoading, isError } = useQuery(['models'], listModels);
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      const existingMessages = await getMessages();
+      setMessages(existingMessages);
+    };
+    loadMessages();
+  }, []);
 
   const {
     mutate,
     isLoading: isSubmitting,
     isError: submitError,
   } = useMutation(submitPrompt, {
-    onSuccess: ({ text, model }) => {
+    onSuccess: ({ text }) => {
       // Update messages by removing isLoading flag and adding response
       setMessages((currentMessages) =>
         currentMessages
           .map((msg) => (msg.isLoading ? { ...msg, isLoading: false } : msg))
-          .concat([{ text, model, from: 'response' }]),
+          .concat([{ text, from: 'response' }]),
       );
     },
     onError: (error) => {
@@ -32,7 +40,7 @@ function ChatComponent() {
     },
   });
 
-  const sendMessage = (e) => {
+  const sendMessage = (e: any) => {
     e.preventDefault();
     if (input.trim()) {
       setMessages((prev) => [...prev, { text: input, model: selectedModel, from: 'user', isLoading: true }]);

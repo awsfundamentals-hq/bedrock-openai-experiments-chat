@@ -1,20 +1,20 @@
 import { Api, Bucket, Config, Stack, StackContext, Table } from 'sst/constructs';
 
 export function Backend({ stack }: StackContext, apiKey: string) {
-  const table = createTables(stack);
+  const tables = createTables(stack);
   const bucket = createS3Bucket(stack);
-  const api = createApi(stack, table, bucket, apiKey);
+  const api = createApi(stack, tables, bucket, apiKey);
   stack.addOutputs({});
   return { apiUrl: api.url };
 }
 
-function createApi(stack: Stack, table: Table, bucket: Bucket, apiKey: string): Api {
+function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string): Api {
   const openAiApiKey = new Config.Secret(stack, 'OPENAI_API_KEY');
 
   const api = new Api(stack, 'api', {
     defaults: {
       function: {
-        bind: [table, bucket, openAiApiKey],
+        bind: [...tables, bucket, openAiApiKey],
         environment: {
           API_KEY: apiKey,
         },
@@ -33,12 +33,13 @@ function createApi(stack: Stack, table: Table, bucket: Bucket, apiKey: string): 
       'GET /api/v1/notes/{id}': 'packages/functions/src/notes-api.get',
       'GET /api/v1/openai/models': 'packages/functions/src/openai-api.listModels',
       'POST /api/v1/openai/submit': 'packages/functions/src/openai-api.submit',
+      'GET /api/v1/openai/messages': 'packages/functions/src/openai-api.getMessages',
     },
   });
   return api;
 }
 
-function createTables(stack: Stack): Table {
+function createTables(stack: Stack): Table[] {
   const notes: Table = new Table(stack, 'notes', {
     fields: {
       id: 'string',
@@ -47,7 +48,14 @@ function createTables(stack: Stack): Table {
     },
     primaryIndex: { partitionKey: 'id' },
   });
-  return notes;
+
+  const chats: Table = new Table(stack, 'chats', {
+    fields: {
+      id: 'string',
+    },
+    primaryIndex: { partitionKey: 'id' },
+  });
+  return [notes, chats];
 }
 
 function createS3Bucket(stack: Stack): Bucket {

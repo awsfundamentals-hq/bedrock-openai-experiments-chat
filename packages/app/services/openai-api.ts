@@ -1,5 +1,14 @@
 import { defaultParams } from './auth';
 
+export interface ChatMessage {
+  id?: string;
+  timestamp?: number;
+  text: string;
+  from: string;
+
+  isLoading?: boolean;
+}
+
 export const listModels = async (): Promise<{ id: string }[]> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/models`, defaultParams);
   return res.json();
@@ -17,4 +26,9 @@ export const submitPrompt = async (params: {
   });
   const result = (await res.json()).text;
   return { text: result, model };
+};
+
+export const getMessages = async (): Promise<ChatMessage[]> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/messages`, defaultParams);
+  return res.json();
 };
