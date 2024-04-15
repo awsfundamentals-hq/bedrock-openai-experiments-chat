@@ -1,19 +1,23 @@
-import { Api, Bucket, Stack, StackContext, Table } from 'sst/constructs';
+import { Api, Bucket, Config, Stack, StackContext, Table } from 'sst/constructs';
 
-export function Backend({ stack }: StackContext) {
+export function Backend({ stack }: StackContext, apiKey: string) {
   const table = createTables(stack);
   const bucket = createS3Bucket(stack);
-  const api = createApi(stack, table, bucket);
+  const api = createApi(stack, table, bucket, apiKey);
   stack.addOutputs({});
   return { apiUrl: api.url };
 }
 
-function createApi(stack: Stack, table: Table, bucket: Bucket): Api {
+function createApi(stack: Stack, table: Table, bucket: Bucket, apiKey: string): Api {
+  const openAiApiKey = new Config.Secret(stack, 'OPENAI_API_KEY');
+
   const api = new Api(stack, 'api', {
     defaults: {
       function: {
-        bind: [table, bucket],
-        environment: {},
+        bind: [table, bucket, openAiApiKey],
+        environment: {
+          API_KEY: apiKey,
+        },
         timeout: 600,
         memorySize: 2048,
         diskSize: 512,
@@ -27,6 +31,8 @@ function createApi(stack: Stack, table: Table, bucket: Bucket): Api {
       'DELETE /api/v1/notes/{id}': 'packages/functions/src/notes-api.del',
       'PUT /api/v1/notes/{id}': 'packages/functions/src/notes-api.update',
       'GET /api/v1/notes/{id}': 'packages/functions/src/notes-api.get',
+      'GET /api/v1/openai/models': 'packages/functions/src/openai-api.listModels',
+      'POST /api/v1/openai/submit': 'packages/functions/src/openai-api.submit',
     },
   });
   return api;

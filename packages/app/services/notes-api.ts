@@ -1,3 +1,5 @@
+import { apiKey, defaultParams } from './auth';
+
 const notesUrl = (id?: string) =>
   `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notes${id ? `/${id}` : ''}`;
 
@@ -8,7 +10,7 @@ export interface NoteEntity {
 }
 
 export const fetchNotes = async (): Promise<NoteEntity[]> => {
-  const res = await fetch(notesUrl());
+  const res = await fetch(notesUrl(), defaultParams);
   return res.json();
 };
 
@@ -22,6 +24,7 @@ export const updateNote = async (data: NoteEntity) => {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      'x-api-key': apiKey,
     },
     body: JSON.stringify(data),
   });
@@ -33,6 +36,7 @@ export const createNote = async (data: NoteEntity) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'x-api-key': apiKey,
     },
     body: JSON.stringify(data),
   });
@@ -41,6 +45,10 @@ export const createNote = async (data: NoteEntity) => {
 
 export const deleteNote = async (id: string): Promise<void> => {
   await fetch(notesUrl(id), {
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+    },
     method: 'DELETE',
   });
 };
