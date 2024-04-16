@@ -32,3 +32,10 @@ export const getMessages = async (): Promise<ChatMessage[]> => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/messages`, defaultParams);
   return res.json();
 };
+
+export const clearMessages = async (): Promise<void> => {
+  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/messages`, {
+    ...defaultParams,
+    method: 'DELETE',
+  });
+}

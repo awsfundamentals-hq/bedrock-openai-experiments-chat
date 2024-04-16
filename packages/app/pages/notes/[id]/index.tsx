@@ -53,7 +53,7 @@ const Note: React.FC = () => {
   if (isFetching) return <div>Loading...</div>;
 
   return (
-    <div className="mt-20 p-4 mt-4 max-w-md mx-auto bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div className="mt-40 p-4 mt-4 max-w-md mx-auto bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
       <input
         className="mb-2 w-full p-2 text-lg font-bold text-gray-900 bg-white border border-gray-300 rounded dark:text-white dark:bg-gray-800 dark:border-gray-700"
         value={desc}

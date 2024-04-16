@@ -1,6 +1,6 @@
 // components/ChatComponent.js
 import { DateTime } from 'luxon';
-import { ChatMessage, getMessages, listModels, submitPrompt } from '@/services/openai-api';
+import { ChatMessage, clearMessages, getMessages, listModels, submitPrompt } from '@/services/openai-api';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
@@ -54,16 +54,31 @@ function ChatComponent() {
           text: input,
           model: selectedModel,
           from: 'user',
-          isLoading: true
-        }
+          isLoading: true,
+        },
       ]);
       mutate({ text: input, model: selectedModel });
       setInput('');
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading models</div>;
+  const handleClearChat = async () => {
+    await clearMessages(); // Call to service method to clear messages on the backend
+    setMessages([]); // Clear messages on the frontend
+  };
+
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div>Loading...</div>
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div>Error loading models</div>
+      </div>
+    );
 
   return (
     <div className="flex flex-col h-screen">
@@ -81,14 +96,26 @@ function ChatComponent() {
             </option>
           ))}
         </select>
+        <button
+          onClick={handleClearChat}
+          className="ml-2 mt-2 bg-red-500 text-white p-2 rounded"
+          disabled={isSubmitting}
+        >
+          Clear Chat
+        </button>
       </div>
       <div className="flex-grow overflow-y-auto p-4 space-y-2">
         {messages.map((message, index) => (
-          <div key={index} className={`max-w-xl mx-auto bg-gray-100 p-2 rounded ${message.from === 'user' ? 'bg-blue-100' : 'bg-green-100'}`}>
+          <div
+            key={index}
+            className={`max-w-xl mx-auto bg-gray-100 p-2 rounded ${message.from === 'user' ? 'bg-blue-100' : 'bg-green-100'}`}
+          >
             {message.text}
             {message.isLoading && <span className="text-sm text-gray-500"> (sending...)</span>}
             <span className="text-sm">{message.from === 'user' ? ' (You)' : ' (AI)'}</span>
-            {message.timestamp && <div className="text-xs text-gray-500">{DateTime.fromMillis(message.timestamp).toRelative()}</div>}
+            {message.timestamp && (
+              <div className="text-xs text-gray-500">{DateTime.fromMillis(message.timestamp).toRelative()}</div>
+            )}
           </div>
         ))}
       </div>

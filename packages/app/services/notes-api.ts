@@ -1,7 +1,6 @@
 import { apiKey, defaultParams } from './auth';
 
-const notesUrl = (id?: string) =>
-  `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notes${id ? `/${id}` : ''}`;
+const notesUrl = (id?: string) => `${process.env.NEXT_PUBLIC_API_URL}/api/v1/notes${id ? `/${id}` : ''}`;
 
 export interface NoteEntity {
   id?: string;
@@ -15,7 +14,7 @@ export const fetchNotes = async (): Promise<NoteEntity[]> => {
 };
 
 export const fetchNoteById = async (id: string): Promise<NoteEntity> => {
-  const res = await fetch(notesUrl(id));
+  const res = await fetch(notesUrl(id), defaultParams);
   return res.json();
 };
 

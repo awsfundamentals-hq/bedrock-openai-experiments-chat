@@ -34,6 +34,7 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
       'GET /api/v1/openai/models': 'packages/functions/src/openai-api.listModels',
       'POST /api/v1/openai/submit': 'packages/functions/src/openai-api.submit',
       'GET /api/v1/openai/messages': 'packages/functions/src/openai-api.getMessages',
+      'DELETE /api/v1/openai/messages': 'packages/functions/src/openai-api.clearMessages',
     },
   });
   return api;
