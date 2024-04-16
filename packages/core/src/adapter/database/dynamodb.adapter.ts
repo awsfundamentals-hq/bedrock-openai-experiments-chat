@@ -42,7 +42,7 @@ export class DynamoDbAdapter {
     return ChatsModel.get(chatId);
   }
 
-  async createMessage(params: { text: string; from: 'user' | 'response' }): Promise<ChatsEntity> {
+  async createMessage(params: { content: string; role: 'user' | 'assistant' }): Promise<ChatsEntity> {
     const message = { id: generateUUID(), ...params, timestamp: DateTime.utc().toMillis() };
     return ChatsModel.create(message);
   }

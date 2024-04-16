@@ -18,13 +18,13 @@ export const listModels = ApiHandler(async (_evt) => {
 
 export const submit = ApiHandler(async (evt) => {
   checkApiKey(evt);
-  const { model, text: prompt } = JSON.parse(evt.body!);
-  await dynamoDbAdapter.createMessage({ text: prompt, from: 'user' });
-  const text = await openAiAdapter.submitPrompt(prompt, model);
-  await dynamoDbAdapter.createMessage({ text, from: 'response' });
+  const { model, content: prompt } = JSON.parse(evt.body!);
+  await dynamoDbAdapter.createMessage({ content: prompt, role: 'user' });
+  const content = await openAiAdapter.submitPrompt(prompt, [], model);
+  await dynamoDbAdapter.createMessage({ content: content, role: 'assistant' });
   return {
     statusCode: 200,
-    body: JSON.stringify({ text, model }),
+    body: JSON.stringify({ content, model }),
   };
 });
 

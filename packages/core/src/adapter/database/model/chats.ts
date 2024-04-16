@@ -6,8 +6,8 @@ import { Table } from 'sst/node/table';
 export interface ChatsEntity extends Item {
   id: string;
   timestamp: number;
-  text: string;
-  from: string;
+  content: string;
+  role: string;
 }
 
 const schema = new Schema(
@@ -17,8 +17,8 @@ const schema = new Schema(
       hashKey: true,
     },
     timestamp: Number,
-    text: String,
-    from: String,
+    content: String,
+    role: String,
   },
   {
     saveUnknown: false,

@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import { Config } from 'sst/node/config';
+import { ChatsEntity } from '../database/model/chats';
 
 enum Models {
   GPT4 = 'gpt-4-1106-preview',
@@ -21,10 +22,10 @@ export class OpenAiAdapter {
     return models;
   }
 
-  async submitPrompt(prompt: string, model = DEFAULT_MODEL): Promise<string> {
-    console.info(`Submitting prompt: ${prompt.substring(0, 50)}...`);
+  async submitPrompt(content: string, previousMessages: ChatsEntity[], model = DEFAULT_MODEL): Promise<string> {
+    console.info(`Submitting prompt: ${content.substring(0, 50)}...`);
     const chatCompletion = await this.client.chat.completions.create({
-      messages: [{ role: 'user', content: prompt }],
+      messages: [{ role: 'user', content }],
       model,
       stream: false,
     });

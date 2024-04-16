@@ -1,10 +1,11 @@
 // components/ChatComponent.js
-import { DateTime } from 'luxon';
 import { ChatMessage, clearMessages, getMessages, listModels, submitPrompt } from '@/services/openai-api';
+import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 function ChatComponent() {
+  const [isClearPending, setIsClearPending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('gpt-3.5-turbo-0613');
@@ -26,12 +27,12 @@ function ChatComponent() {
     isLoading: isSubmitting,
     isError: submitError,
   } = useMutation(submitPrompt, {
-    onSuccess: ({ text }) => {
+    onSuccess: ({ content }) => {
       // Update messages by removing isLoading flag and adding response
       setMessages((currentMessages) =>
         currentMessages
           .map((msg) => (msg.isLoading ? { ...msg, isLoading: false } : msg))
-          .concat([{ text, from: 'response', timestamp: Date.now() }]),
+          .concat([{ content, role: 'assistant', timestamp: Date.now() }]),
       );
     },
     onError: (error) => {
@@ -43,7 +44,7 @@ function ChatComponent() {
     },
   });
 
-  const sendMessage = (e) => {
+  const sendMessage = (e: any) => {
     e.preventDefault();
     if (input.trim()) {
       setMessages((prev) => [
@@ -51,20 +52,22 @@ function ChatComponent() {
         {
           id: Math.random().toString(36).substring(2, 9),
           timestamp: Date.now(),
-          text: input,
+          content: input,
           model: selectedModel,
-          from: 'user',
+          role: 'user',
           isLoading: true,
         },
       ]);
-      mutate({ text: input, model: selectedModel });
+      mutate({ content: input, model: selectedModel });
       setInput('');
     }
   };
 
   const handleClearChat = async () => {
+    setIsClearPending(true);
     await clearMessages(); // Call to service method to clear messages on the backend
     setMessages([]); // Clear messages on the frontend
+    setIsClearPending(false);
   };
 
   if (isLoading)
@@ -98,8 +101,8 @@ function ChatComponent() {
         </select>
         <button
           onClick={handleClearChat}
-          className="ml-2 mt-2 bg-red-500 text-white p-2 rounded"
-          disabled={isSubmitting}
+          disabled={isClearPending}
+          className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 disabled:bg-red-300"
         >
           Clear Chat
         </button>
@@ -108,11 +111,11 @@ function ChatComponent() {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`max-w-xl mx-auto bg-gray-100 p-2 rounded ${message.from === 'user' ? 'bg-blue-100' : 'bg-green-100'}`}
+            className={`max-w-xl mx-auto bg-gray-100 p-2 rounded ${message.role === 'user' ? 'bg-blue-100' : 'bg-green-100'}`}
           >
-            {message.text}
+            {message.content}
             {message.isLoading && <span className="text-sm text-gray-500"> (sending...)</span>}
-            <span className="text-sm">{message.from === 'user' ? ' (You)' : ' (AI)'}</span>
+            <span className="text-sm">{message.role === 'user' ? ' (You)' : ' (AI)'}</span>
             {message.timestamp && (
               <div className="text-xs text-gray-500">{DateTime.fromMillis(message.timestamp).toRelative()}</div>
             )}
