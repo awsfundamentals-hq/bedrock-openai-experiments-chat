@@ -35,7 +35,10 @@ export class DynamoDbAdapter {
   }
 
   async listMessages(): Promise<ChatsEntity[]> {
-    return ChatsModel.scan().exec();
+    const messages = await ChatsModel.scan().exec();
+    // sort by timestamp ascending
+    messages.sort((a, b) => a.timestamp - b.timestamp);
+    return messages;
   }
 
   async getChatMessages(chatId: string): Promise<ChatsEntity> {

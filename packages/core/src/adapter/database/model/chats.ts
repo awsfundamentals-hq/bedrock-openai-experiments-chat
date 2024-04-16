@@ -7,7 +7,7 @@ export interface ChatsEntity extends Item {
   id: string;
   timestamp: number;
   content: string;
-  role: string;
+  role: 'user' | 'system' | 'assistant';
 }
 
 const schema = new Schema(

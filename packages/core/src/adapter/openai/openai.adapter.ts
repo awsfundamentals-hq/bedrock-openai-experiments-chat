@@ -25,7 +25,7 @@ export class OpenAiAdapter {
   async submitPrompt(content: string, previousMessages: ChatsEntity[], model = DEFAULT_MODEL): Promise<string> {
     console.info(`Submitting prompt: ${content.substring(0, 50)}...`);
     const chatCompletion = await this.client.chat.completions.create({
-      messages: [{ role: 'user', content }],
+      messages: [...previousMessages.map(({ content, role }) => ({ content, role })), { role: 'user', content }],
       model,
       stream: false,
     });

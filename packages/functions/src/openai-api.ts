@@ -19,8 +19,9 @@ export const listModels = ApiHandler(async (_evt) => {
 export const submit = ApiHandler(async (evt) => {
   checkApiKey(evt);
   const { model, content: prompt } = JSON.parse(evt.body!);
+  const previousMessages = await dynamoDbAdapter.listMessages();
   await dynamoDbAdapter.createMessage({ content: prompt, role: 'user' });
-  const content = await openAiAdapter.submitPrompt(prompt, [], model);
+  const content = await openAiAdapter.submitPrompt(prompt, previousMessages, model);
   await dynamoDbAdapter.createMessage({ content: content, role: 'assistant' });
   return {
     statusCode: 200,
