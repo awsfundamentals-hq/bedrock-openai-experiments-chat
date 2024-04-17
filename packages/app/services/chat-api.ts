@@ -9,17 +9,18 @@ export interface ChatMessage {
   isLoading?: boolean;
 }
 
-export const listModels = async (): Promise<{ id: string }[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/models`, defaultParams);
+export const listModels = async (adapter: string): Promise<{ id: string }[]> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/${adapter}/models`, defaultParams);
   return res.json();
 };
 
 export const submitPrompt = async (params: {
+  adapter: string;
   content: string;
   model: string;
 }): Promise<{ content: string; model: string }> => {
-  const { content, model } = params;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/submit`, {
+  const { content, model, adapter } = params;
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/${adapter}/submit`, {
     ...defaultParams,
     method: 'POST',
     body: JSON.stringify({ content, model }),
@@ -29,12 +30,12 @@ export const submitPrompt = async (params: {
 };
 
 export const getMessages = async (): Promise<ChatMessage[]> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/messages`, defaultParams);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, defaultParams);
   return res.json();
 };
 
 export const clearMessages = async (): Promise<void> => {
-  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/openai/messages`, {
+  await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/chat/messages`, {
     ...defaultParams,
     method: 'DELETE',
   });

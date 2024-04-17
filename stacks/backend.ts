@@ -38,11 +38,12 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
       'DELETE /api/v1/notes/{id}': 'packages/functions/src/notes-api.del',
       'PUT /api/v1/notes/{id}': 'packages/functions/src/notes-api.update',
       'GET /api/v1/notes/{id}': 'packages/functions/src/notes-api.get',
+      // General Chat
+      'DELETE /api/v1/chat/messages': 'packages/functions/src/openai-api.clearMessages',
+      'GET /api/v1/chat/messages': 'packages/functions/src/openai-api.getMessages',
       // OpenAI API
-      'GET /api/v1/openai/models': 'packages/functions/src/openai-api.listModels',
-      'POST /api/v1/openai/submit': 'packages/functions/src/openai-api.submit',
-      'GET /api/v1/openai/messages': 'packages/functions/src/openai-api.getMessages',
-      'DELETE /api/v1/openai/messages': 'packages/functions/src/openai-api.clearMessages',
+      'GET /api/v1/chat/openai/models': 'packages/functions/src/openai-api.listModels',
+      'POST /api/v1/chat/openai/submit': 'packages/functions/src/openai-api.submit',
       // BedRock API
       'GET /api/v1/bedrock/models': 'packages/functions/src/bedrock-api.listModels',
     },
