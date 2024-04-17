@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 function ChatComponent() {
+  const [adapter, setAdapter] = useState('');
   const [isClearPending, setIsClearPending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -13,6 +14,7 @@ function ChatComponent() {
   const { data: models = [], isLoading, isError } = useQuery(['models'], listModels);
 
   useEffect(() => {
+    if (!adapter) return; // Don't load messages if no adapter is selected
     const loadMessages = async () => {
       const existingMessages = await getMessages();
       // sort by timestamp ascending
@@ -20,7 +22,7 @@ function ChatComponent() {
       setMessages(existingMessages);
     };
     loadMessages();
-  }, []);
+  }, [adapter]);
 
   const {
     mutate,
@@ -69,6 +71,23 @@ function ChatComponent() {
     setMessages([]); // Clear messages on the frontend
     setIsClearPending(false);
   };
+
+  if (!adapter) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col items-center">
+          <h1 className="mb-4 text-lg font-bold">Select an Adapter</h1>
+          <button onClick={() => setAdapter('openai')} className="mb-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 flex items-center gap-2">
+            <img src="/icon-openai.svg" alt="OpenAI Icon" className="w-6 h-6" /> OpenAI
+          </button>
+          <button onClick={() => setAdapter('bedrock')} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 flex items-center gap-2">
+            <img src="/icon-bedrock.png" alt="Bedrock Icon" className="w-6 h-6" /> Amazon Bedrock
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
 
   if (isLoading)
     return (

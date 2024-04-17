@@ -1,3 +1,4 @@
+import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Api, Bucket, Config, Stack, StackContext, Table } from 'sst/constructs';
 
 export function Backend({ stack }: StackContext, apiKey: string) {
@@ -21,7 +22,13 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
         timeout: 600,
         memorySize: 2048,
         diskSize: 512,
-        permissions: [],
+        permissions: [
+          new PolicyStatement({
+            actions: ['bedrock:ListFoundationModels'],
+            effect: Effect.ALLOW,
+            resources: [`*`],
+          }),
+        ],
       },
     },
     cors: true,
@@ -31,10 +38,13 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
       'DELETE /api/v1/notes/{id}': 'packages/functions/src/notes-api.del',
       'PUT /api/v1/notes/{id}': 'packages/functions/src/notes-api.update',
       'GET /api/v1/notes/{id}': 'packages/functions/src/notes-api.get',
+      // OpenAI API
       'GET /api/v1/openai/models': 'packages/functions/src/openai-api.listModels',
       'POST /api/v1/openai/submit': 'packages/functions/src/openai-api.submit',
       'GET /api/v1/openai/messages': 'packages/functions/src/openai-api.getMessages',
       'DELETE /api/v1/openai/messages': 'packages/functions/src/openai-api.clearMessages',
+      // BedRock API
+      'GET /api/v1/bedrock/models': 'packages/functions/src/bedrock-api.listModels',
     },
   });
   return api;
