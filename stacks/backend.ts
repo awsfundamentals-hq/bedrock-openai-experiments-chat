@@ -24,7 +24,7 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
         diskSize: 512,
         permissions: [
           new PolicyStatement({
-            actions: ['bedrock:ListFoundationModels'],
+            actions: ['bedrock:ListFoundationModels', 'bedrock:InvokeModel'],
             effect: Effect.ALLOW,
             resources: [`*`],
           }),
@@ -45,7 +45,8 @@ function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string
       'GET /api/v1/chat/openai/models': 'packages/functions/src/openai-api.listModels',
       'POST /api/v1/chat/openai/submit': 'packages/functions/src/openai-api.submit',
       // BedRock API
-      'GET /api/v1/bedrock/models': 'packages/functions/src/bedrock-api.listModels',
+      'GET /api/v1/chat/bedrock/models': 'packages/functions/src/bedrock-api.listModels',
+      'POST /api/v1/chat/bedrock/submit': 'packages/functions/src/bedrock-api.submit',
     },
   });
   return api;

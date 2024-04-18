@@ -2,25 +2,33 @@
 import { ChatMessage, clearMessages, getMessages, listModels, submitPrompt } from '@/services/chat-api';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 
 function ChatComponent() {
   const [adapter, setAdapter] = useState<'openai' | 'bedrock' | undefined>(undefined);
   const [isClearPending, setIsClearPending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-  const [selectedModel, setSelectedModel] = useState<string>('gpt-3.5-turbo-0613');
-
-  const { data: models = [], isLoading, isError } = useQuery(['models'], listModels.bind(null, 'openai'));
+  const [selectedModel, setSelectedModel] = useState<string>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [models, setModels] = useState<{ id: string }[]>([]);
 
   useEffect(() => {
     if (!adapter) return; // Don't load messages if no adapter is selected
+    if (adapter === 'openai') setSelectedModel('gpt-3.5-turbo-0613');
+    if (adapter === 'bedrock') setSelectedModel('amazon.titan-text-express-v1');
+    const loadModels = async () => {
+      const m = await listModels(adapter);
+      setModels(m);
+      setIsLoading(false);
+    };
     const loadMessages = async () => {
       const existingMessages = await getMessages();
       // sort by timestamp ascending
       existingMessages.sort((a, b) => a.timestamp! - b.timestamp!);
       setMessages(existingMessages);
     };
+    loadModels();
     loadMessages();
   }, [adapter]);
 
@@ -98,12 +106,6 @@ function ChatComponent() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div>Loading...</div>
-      </div>
-    );
-  if (isError)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div>Error loading models</div>
       </div>
     );
 
