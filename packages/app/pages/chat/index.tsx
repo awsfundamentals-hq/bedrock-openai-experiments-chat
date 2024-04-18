@@ -15,7 +15,7 @@ function ChatComponent() {
 
   useEffect(() => {
     if (!adapter) return; // Don't load messages if no adapter is selected
-    if (adapter === 'openai') setSelectedModel('gpt-3.5-turbo-0613');
+    if (adapter === 'openai') setSelectedModel('gpt-4-turbo');
     if (adapter === 'bedrock') setSelectedModel('amazon.titan-text-express-v1');
     const loadModels = async () => {
       const m = await listModels(adapter);

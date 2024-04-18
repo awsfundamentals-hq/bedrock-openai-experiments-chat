@@ -35,7 +35,7 @@ const Header: React.FC = () => {
                     href="/notes"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Notes
+                    📝 Notes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -43,7 +43,7 @@ const Header: React.FC = () => {
                     href="/chat"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Chat
+                    💬 Chat
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>

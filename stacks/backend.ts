@@ -1,20 +1,22 @@
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Api, Bucket, Config, Stack, StackContext, Table } from 'sst/constructs';
+import { Api, Config, Stack, StackContext, Table } from 'sst/constructs';
 
 export function Backend({ stack }: StackContext, apiKey: string) {
   const tables = createTables(stack);
-  const bucket = createS3Bucket(stack);
-  const api = createApi(stack, tables, bucket, apiKey);
+  const api = createApi(stack, tables, apiKey);
   return { apiUrl: api.url };
 }
 
-function createApi(stack: Stack, tables: Table[], bucket: Bucket, apiKey: string): Api {
+function createApi(stack: Stack, tables: Table[], apiKey: string): Api {
+  // Our OpenAI API Key
+  // this needs to be provided to SST once per stage via the following command:
+  // 'npx sst secrets set OPENAI_API_KEY sk-Y....BcZ'
   const openAiApiKey = new Config.Secret(stack, 'OPENAI_API_KEY');
 
   const api = new Api(stack, 'api', {
     defaults: {
       function: {
-        bind: [...tables, bucket, openAiApiKey],
+        bind: [...tables, openAiApiKey],
         environment: {
           API_KEY: apiKey,
         },
@@ -68,11 +70,4 @@ function createTables(stack: Stack): Table[] {
     primaryIndex: { partitionKey: 'id' },
   });
   return [notes, chats];
-}
-
-function createS3Bucket(stack: Stack): Bucket {
-  const bucket = new Bucket(stack, 'rag-data', {
-    name: `${stack.stackName.toLocaleLowerCase()}-data`,
-  });
-  return bucket;
 }
