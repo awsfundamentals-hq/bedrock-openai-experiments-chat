@@ -1,6 +1,6 @@
-import { DynamoDbAdapter } from '@bedrock-rag/core/adapter/database/dynamodb.adapter';
-import { NotesEntity } from '@bedrock-rag/core/adapter/database/model/notes';
-import { checkApiKey } from '@bedrock-rag/core/utils/core';
+import { DynamoDbAdapter } from '@bedrock-openai-experiments-chat/core/adapter/database/dynamodb.adapter';
+import { NotesEntity } from '@bedrock-openai-experiments-chat/core/adapter/database/model/notes';
+import { checkApiKey } from '@bedrock-openai-experiments-chat/core/utils/core';
 import { ApiHandler } from 'sst/node/api';
 
 const notesAdapter = new DynamoDbAdapter();

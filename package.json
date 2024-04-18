@@ -1,5 +1,5 @@
 {
-  "name": "bedrock-rag",
+  "name": "bedrock-openai-experiments-chat",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,11 +13,14 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
+    "@types/node": "^20.12.7",
+    "@types/uuid": "^9.0.8",
     "aws-cdk-lib": "2.132.1",
     "constructs": "10.3.0",
     "prettier": "^3.2.5",
     "sst": "^2.41.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "uuid": "^9.0.1"
   },
   "workspaces": [
     "packages/*"

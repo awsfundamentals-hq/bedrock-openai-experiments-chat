@@ -1,19 +1,12 @@
-import {
-  AllowedMethods,
-  ViewerProtocolPolicy,
-} from 'aws-cdk-lib/aws-cloudfront';
+import { AllowedMethods, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
 import { NextjsSite, Stack, StackContext } from 'sst/constructs';
 
-export function Frontend(
-  { stack }: StackContext,
-  apiUrl: string,
-  apiKey: string,
-) {
+export function Frontend({ stack }: StackContext, apiUrl: string, apiKey: string) {
   const app = createApp(stack, apiUrl, apiKey);
 
-  return stack.addOutputs({
+  return {
     appUrl: app.url,
-  });
+  };
 }
 
 function createApp(stack: Stack, apiUrl: string, apiKey: string) {

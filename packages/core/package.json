@@ -1,5 +1,5 @@
 {
-  "name": "@bedrock-rag/core",
+  "name": "@bedrock-openai-experiments-chat/core",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

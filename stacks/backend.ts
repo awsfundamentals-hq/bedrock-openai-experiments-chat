@@ -5,7 +5,6 @@ export function Backend({ stack }: StackContext, apiKey: string) {
   const tables = createTables(stack);
   const bucket = createS3Bucket(stack);
   const api = createApi(stack, tables, bucket, apiKey);
-  stack.addOutputs({});
   return { apiUrl: api.url };
 }
 

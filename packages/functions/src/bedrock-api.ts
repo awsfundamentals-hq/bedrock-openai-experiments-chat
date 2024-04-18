@@ -1,7 +1,7 @@
-import { BedrockAdapter } from '@bedrock-rag/core/adapter/bedrock/bedrock.adapter';
-import { DynamoDbAdapter } from '@bedrock-rag/core/adapter/database/dynamodb.adapter';
-import { ChatsEntity } from '@bedrock-rag/core/adapter/database/model/chats';
-import { checkApiKey, headers, notesPrompt } from '@bedrock-rag/core/utils/core';
+import { BedrockAdapter } from '@bedrock-openai-experiments-chat/core/adapter/bedrock/bedrock.adapter';
+import { DynamoDbAdapter } from '@bedrock-openai-experiments-chat/core/adapter/database/dynamodb.adapter';
+import { ChatsEntity } from '@bedrock-openai-experiments-chat/core/adapter/database/model/chats';
+import { checkApiKey, headers, notesPrompt } from '@bedrock-openai-experiments-chat/core/utils/core';
 import { ApiHandler } from 'sst/node/api';
 
 const bedrock = new BedrockAdapter();
