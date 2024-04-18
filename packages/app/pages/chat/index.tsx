@@ -68,7 +68,7 @@ function ChatComponent() {
           isLoading: true,
         },
       ]);
-      mutate({ adapter: adapter!, content: input, model: selectedModel });
+      mutate({ adapter: adapter!, content: input, model: selectedModel! });
       setInput('');
     }
   };
@@ -78,6 +78,11 @@ function ChatComponent() {
     await clearMessages(); // Call to service method to clear messages on the backend
     setMessages([]); // Clear messages on the frontend
     setIsClearPending(false);
+  };
+
+  const handleClearAdapter = () => {
+    setAdapter(undefined);
+    setModels([]);
   };
 
   if (!adapter) {
@@ -131,6 +136,12 @@ function ChatComponent() {
           className="ml-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 disabled:bg-red-300"
         >
           Clear Chat
+        </button>
+        <button
+          onClick={handleClearAdapter}
+          className="ml-2 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-700"
+        >
+          Change Adapter
         </button>
       </div>
       <div className="flex-grow overflow-y-auto p-4 space-y-2">
