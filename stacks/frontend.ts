@@ -18,9 +18,6 @@ function createApp(stack: Stack, apiUrl: string, apiKey: string) {
       NEXT_PUBLIC_API_KEY: apiKey,
     },
     cdk: {
-      bucket: {
-        bucketName: `${stack.stackName.toLocaleLowerCase()}-app`,
-      },
       distribution: {
         defaultBehavior: {
           viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
