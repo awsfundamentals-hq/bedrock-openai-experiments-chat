@@ -1,5 +1,10 @@
 # Serverless Chat Application with Amazon Bedrock and OpenAI
 
+Repository for the accompanying [blog post]([url](https://blog.awsfundamentals.com/amazon-bedrock-the-openai-api-and-sst)) and [newsletter](https://newsletter.awsfundamentals.com).
+
+![image](https://github.com/awsfundamentals-hq/bedrock-openai-experiments-chat/assets/19362086/6d73a989-93e0-486b-8366-ea1aae0cc552)
+
+
 This project is a serverless chat application that leverages Amazon Bedrock and the OpenAI API to enhance chat functionalities with advanced AI-driven contextual understanding. Built using Serverless Stack (SST), NextJS, AWS Lambda, and DynamoDB, it offers a robust platform for real-time messaging enriched with AI capabilities.
 
 ## Architecture
