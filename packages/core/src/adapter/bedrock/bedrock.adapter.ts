@@ -1,5 +1,6 @@
 import { BedrockClient, ListFoundationModelsCommand } from '@aws-sdk/client-bedrock';
 import { BedrockRuntimeClient, InvokeModelCommand } from '@aws-sdk/client-bedrock-runtime';
+import { Exception } from '../../utils/exception';
 import { ChatsEntity } from '../database/model/chats';
 
 const client = new BedrockClient({ region: 'us-east-1' });
@@ -35,18 +36,22 @@ export class BedrockAdapter {
   async submitPrompt(content: string, previousMessages: ChatsEntity[], model = DEFAULT_MODEL): Promise<string> {
     console.info(`Submitting prompt: ${content.substring(0, 50)}...`);
     const { body, responseExtract } = this.buildRequest(model, content, previousMessages);
-    // This is a placeholder implementation that just returns the content
-    const { body: res } = await runtimeClient.send(
-      new InvokeModelCommand({
-        modelId: model,
-        contentType: 'application/json',
-        accept: 'application/json',
-        body,
-      }),
-    );
-    const response = JSON.parse(new TextDecoder().decode(res));
-    console.info(`Results received:\n\n${JSON.stringify(response, null, 2)}`);
-    return responseExtract(response);
+    try {
+      const { body: res } = await runtimeClient.send(
+        new InvokeModelCommand({
+          modelId: model,
+          contentType: 'application/json',
+          accept: 'application/json',
+          body,
+        }),
+      );
+      const response = JSON.parse(new TextDecoder().decode(res));
+      console.info(`Results received:\n\n${JSON.stringify(response, null, 2)}`);
+      return responseExtract(response);
+    } catch (e) {
+      console.error(`Error submitting prompt: ${e}`);
+      throw new Exception('Error from Bedrock', 500, e);
+    }
   }
 
   private buildRequest(
