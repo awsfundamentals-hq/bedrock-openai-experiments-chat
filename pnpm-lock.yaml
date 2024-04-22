@@ -99,6 +99,30 @@ importers:
 
   packages/core:
     dependencies:
+      '@middy/core':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/error-logger':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/http-content-negotiation':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/http-cors':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/http-error-handler':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/http-json-body-parser':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/http-response-serializer':
+        specifier: ^5.3.2
+        version: 5.3.2
+      '@middy/util':
+        specifier: ^5.3.2
+        version: 5.3.2
       dynamoose:
         specifier: ^4.0.0
         version: 4.0.0
@@ -121,6 +145,9 @@ importers:
       '@aws-sdk/client-bedrock-runtime':
         specifier: ^3.556.0
         version: 3.556.0
+      '@types/aws-lambda':
+        specifier: ^8.10.137
+        version: 8.10.137
       '@types/luxon':
         specifier: ^3.4.2
         version: 3.4.2
@@ -2113,6 +2140,13 @@ packages:
     resolution: {integrity: sha512-JR+MuD4awAXvutu7HArephXfZm09GPTaSAQUqNcJB5+ZENRm4kV+L6vJL6Tn1xHjCcHksO+HAqj3gYtm5K94vA==}
     dev: true
 
+  /@datastream/core@0.0.35:
+    resolution: {integrity: sha512-jmKFcDTYqtDy8DHPahaheg3MlLBiQboYX4jYX8oxE1tO5x7cfLl5M6bqR/o46RCEFZ3M9yMVfEEh0hy5raErEw==}
+    engines: {node: '>=18'}
+    dependencies:
+      cloneable-readable: 3.0.0
+    dev: false
+
   /@envelop/core@3.0.6:
     resolution: {integrity: sha512-06t1xCPXq6QFN7W1JUEf68aCwYN0OUDNAIoJe7bAqhaoa2vn7NCcuX1VHkJ/OWpmElUgCsRO6RiBbIru1in0Ig==}
     dependencies:
@@ -2744,6 +2778,59 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
     dev: true
+
+  /@middy/core@5.3.2:
+    resolution: {integrity: sha512-g1PonDsJI/t6DldRD/MijnE9kQBWYDZRfGkqJv/Dy+TXyTJmsmk6k/znx+RgqZYlpz1QodWi+6gzRsjPuvM8ew==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@datastream/core': 0.0.35
+    dev: false
+
+  /@middy/error-logger@5.3.2:
+    resolution: {integrity: sha512-hLG9qa091l+Y/3r1iI+2NPAZrTohaoCB593pIAR57Dh+Qpzhbp/SxABry7uLuiY277i4CRBoX9hmDGevF1OTww==}
+    engines: {node: '>=18'}
+    dev: false
+
+  /@middy/http-content-negotiation@5.3.2:
+    resolution: {integrity: sha512-QhcwqKcGhlz1Sh0KkpZc2U8JaBGaNJsU8eWWIo81+jn9dgccexzycFjPWHsDJZw7dsjGvTFcpkkw7UVzpookNw==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@middy/util': 5.3.2
+      negotiator: 0.6.3
+    dev: false
+
+  /@middy/http-cors@5.3.2:
+    resolution: {integrity: sha512-nayDniMRaBDPKrEnYs3JPiYCv8UYJCHSSfyD8y7dUzm4PjvCrk13+sdFKKP7rv+ie6pXa+iHJN9js16t2bnW/w==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@middy/util': 5.3.2
+    dev: false
+
+  /@middy/http-error-handler@5.3.2:
+    resolution: {integrity: sha512-GJIT3K2uHsVcJiitbzMAS3VqD6wULs6aRyVpOJXypvjXnnjRBmIr7NaiyX7UDd0Ak+bOZbIEbaWylcWVKVCNfg==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@middy/util': 5.3.2
+    dev: false
+
+  /@middy/http-json-body-parser@5.3.2:
+    resolution: {integrity: sha512-fReh7E7+uIzVa4meO3IDQQ2plzpFjwYxToRaoUGQNZCL8zFI+pn00hIVsmmSJB0V3lW8HEoh8SJgwlnbbIAvUA==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@middy/util': 5.3.2
+    dev: false
+
+  /@middy/http-response-serializer@5.3.2:
+    resolution: {integrity: sha512-t/CGsJan4apU6bKeEmUgJfymtwMSD7oGW/jD/jtGZLi4rtadFUepgzdlXywOznJIcipkufVV6CVigbiEV5yHXw==}
+    engines: {node: '>=18'}
+    dependencies:
+      '@middy/util': 5.3.2
+    dev: false
+
+  /@middy/util@5.3.2:
+    resolution: {integrity: sha512-/Y5xxPwkQAigphYmJhThN6TGQCCFgybOYYK7SfiEr8cY7IhYnTys2uyTJR7ziS5jP82zNlgE9H5ZEj6IswHOKQ==}
+    engines: {node: '>=18'}
+    dev: false
 
   /@next/env@14.2.1:
     resolution: {integrity: sha512-qsHJle3GU3CmVx7pUoXcghX4sRN+vINkbLdH611T8ZlsP//grzqVW87BSUgOZeSAD4q7ZdZicdwNe/20U2janA==}
@@ -4718,7 +4805,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
     dev: true
 
@@ -4913,6 +5000,12 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /cloneable-readable@3.0.0:
+    resolution: {integrity: sha512-Lkfd9IRx1nfiBr7UHNxJSl/x7DOeUfYmxzCkxYJC2tyc/9vKgV75msgLGurGQsak/NvJDHMWcshzEXRlxfvhqg==}
+    dependencies:
+      readable-stream: 4.5.2
+    dev: false
 
   /clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
@@ -5869,6 +5962,11 @@ packages:
     resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
     engines: {node: '>=0.4.x'}
     dev: true
+
+  /events@3.3.0:
+    resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
+    engines: {node: '>=0.8.x'}
+    dev: false
 
   /execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
@@ -7402,7 +7500,6 @@ packages:
   /negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
-    dev: true
 
   /next@14.2.1(@babel/core@7.24.4)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-SF3TJnKdH43PMkCcErLPv+x/DY1YCklslk3ZmwaVoyUfDgHKexuKlf9sEfBQ69w+ue8jQ3msLb+hSj1T19hGag==}
@@ -8109,6 +8206,17 @@ packages:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
+
+  /readable-stream@4.5.2:
+    resolution: {integrity: sha512-yjavECdqeZ3GLXNgRXgeQEdz9fvDDkNKyHnbHRFtOr7/LcfgBcmct7t/ET+HaCTqfh06OzoAxrkN/IfjJBVe+g==}
+    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dependencies:
+      abort-controller: 3.0.0
+      buffer: 6.0.3
+      events: 3.3.0
+      process: 0.11.10
+      string_decoder: 1.3.0
+    dev: false
 
   /readdir-glob@1.1.3:
     resolution: {integrity: sha512-v05I2k7xN8zXvPD9N+z/uhXPaj0sUFCe2rcWZIpBsqxfP7xXFQ0tipAd/wjj1YxWyWtUS5IDJpOG82JKt2EAVA==}

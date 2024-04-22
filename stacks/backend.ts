@@ -40,8 +40,8 @@ function createApi(stack: Stack, tables: Table[], apiKey: string): Api {
       'PUT /api/v1/notes/{id}': 'packages/functions/src/notes-api.update',
       'GET /api/v1/notes/{id}': 'packages/functions/src/notes-api.get',
       // General Chat
-      'DELETE /api/v1/chat/messages': 'packages/functions/src/openai-api.clearMessages',
-      'GET /api/v1/chat/messages': 'packages/functions/src/openai-api.getMessages',
+      'DELETE /api/v1/chat/messages': 'packages/functions/src/messages-api.clearMessages',
+      'GET /api/v1/chat/messages': 'packages/functions/src/messages-api.getMessages',
       // OpenAI API
       'GET /api/v1/chat/openai/models': 'packages/functions/src/openai-api.listModels',
       'POST /api/v1/chat/openai/submit': 'packages/functions/src/openai-api.submit',

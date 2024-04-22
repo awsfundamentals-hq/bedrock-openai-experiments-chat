@@ -1,25 +1,18 @@
 import { BedrockAdapter } from '@bedrock-openai-experiments-chat/core/adapter/bedrock/bedrock.adapter';
 import { DynamoDbAdapter } from '@bedrock-openai-experiments-chat/core/adapter/database/dynamodb.adapter';
 import { ChatsEntity } from '@bedrock-openai-experiments-chat/core/adapter/database/model/chats';
-import { checkApiKey, headers, notesPrompt } from '@bedrock-openai-experiments-chat/core/utils/core';
-import { ApiHandler } from 'sst/node/api';
+import { notesPrompt, toResponse } from '@bedrock-openai-experiments-chat/core/utils/core';
+import { buildHandler } from '@bedrock-openai-experiments-chat/core/utils/middlewares';
 
 const bedrock = new BedrockAdapter();
 const dynamoDbAdapter = new DynamoDbAdapter();
 
-export const listModels = ApiHandler(async (evt) => {
-  checkApiKey(evt);
-
+export const listModels = buildHandler(async (evt) => {
   const response = await bedrock.listModels();
-  return {
-    statusCode: 200,
-    headers,
-    body: JSON.stringify(response),
-  };
+  return toResponse({ body: response });
 });
 
-export const submit = ApiHandler(async (evt) => {
-  checkApiKey(evt);
+export const submit = buildHandler(async (evt) => {
   const parsedBody = JSON.parse(evt.body!);
   const { model } = parsedBody;
   let { content: prompt } = parsedBody;
@@ -37,8 +30,5 @@ export const submit = ApiHandler(async (evt) => {
   console.info(JSON.stringify(previousMessages, null, 2));
   const content = await bedrock.submitPrompt(prompt, previousMessages, model);
   await dynamoDbAdapter.createMessage({ content: content, role: 'assistant' });
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ content, model }),
-  };
+  return toResponse({ body: { content, model } });
 });

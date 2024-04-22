@@ -1,24 +1,21 @@
 import { DynamoDbAdapter } from '@bedrock-openai-experiments-chat/core/adapter/database/dynamodb.adapter';
 import { ChatsEntity } from '@bedrock-openai-experiments-chat/core/adapter/database/model/chats';
 import { OpenAiAdapter } from '@bedrock-openai-experiments-chat/core/adapter/openai/openai.adapter';
-import { checkApiKey, notesPrompt } from '@bedrock-openai-experiments-chat/core/utils/core';
-import { ApiHandler } from 'sst/node/api';
+import { notesPrompt, toResponse } from '@bedrock-openai-experiments-chat/core/utils/core';
+import { buildHandler } from '@bedrock-openai-experiments-chat/core/utils/middlewares';
 
 const openAiAdapter = new OpenAiAdapter();
 const dynamoDbAdapter = new DynamoDbAdapter();
 
-export const listModels = ApiHandler(async (_evt) => {
-  checkApiKey(_evt);
+export const listModels = buildHandler(async (_evt) => {
   const response = await openAiAdapter.listModels();
   const models = response.data;
-  return {
-    statusCode: 200,
+  return toResponse({
     body: JSON.stringify(models),
-  };
+  });
 });
 
-export const submit = ApiHandler(async (evt) => {
-  checkApiKey(evt);
+export const submit = buildHandler(async (evt) => {
   const parsedBody = JSON.parse(evt.body!);
   const { model } = parsedBody;
   let { content: prompt } = parsedBody;
@@ -33,29 +30,9 @@ export const submit = ApiHandler(async (evt) => {
   } else {
     prompt = `${notesPrompt(notes)}\n${prompt}`;
   }
-  console.info(JSON.stringify(previousMessages, null, 2));
   const content = await openAiAdapter.submitPrompt(prompt, previousMessages, model);
   await dynamoDbAdapter.createMessage({ content: content, role: 'assistant' });
-  return {
-    statusCode: 200,
+  return toResponse({
     body: JSON.stringify({ content, model }),
-  };
-});
-
-export const getMessages = ApiHandler(async (_evt) => {
-  checkApiKey(_evt);
-  const messages = await dynamoDbAdapter.listMessages();
-  return {
-    statusCode: 200,
-    body: JSON.stringify(messages),
-  };
-});
-
-export const clearMessages = ApiHandler(async (evt) => {
-  checkApiKey(evt);
-  await dynamoDbAdapter.clearMessages();
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Messages cleared' }),
-  };
+  });
 });

@@ -28,3 +28,14 @@ export const headers = {
   'Access-Control-Allow-Credentials': true,
   'Content-Type': 'application/json',
 };
+
+export function toResponse(params?: { statusCode?: number; body?: any; headers?: Record<string, string> }) {
+  const { headers } = params?.headers ?? {};
+  let body = params?.body ?? {};
+
+  return {
+    statusCode: params?.statusCode ?? 200,
+    headers,
+    body,
+  };
+}
