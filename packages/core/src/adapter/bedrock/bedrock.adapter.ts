@@ -70,8 +70,11 @@ export class BedrockAdapter {
           const prefix = role === 'user' ? 'User: ' : 'Assistant: ';
           return `\n\n${prefix}${content}`;
         }),
-        `\n\nUser: ${content}\n\nAssistant: `,
+        `User: ${content}\n\nAssistant: `,
       ].join('\n\n');
+      console.info(`-------------------------`);
+      console.info(`Prompt:\n${inputText}`);
+      console.info(`-------------------------`);
       return {
         responseExtract: (data) => data.results?.[0]?.outputText,
         body: JSON.stringify({
@@ -90,8 +93,11 @@ export class BedrockAdapter {
           const prefix = role === 'user' ? 'Human: ' : 'Assistant: ';
           return `\n\n${prefix}${content}`;
         }),
-        `\n\nHuman:\n\n${content}`,
+        `Human: ${content}\n\nAssistant: `,
       ].join('\n\n');
+      console.info(`-------------------------`);
+      console.info(`Prompt:\n${prompt}`);
+      console.info(`-------------------------`);
       return {
         responseExtract: (data) => data.completion,
         body: JSON.stringify({
@@ -100,7 +106,6 @@ export class BedrockAdapter {
           top_p: 1,
           top_k: 250,
           max_tokens_to_sample: 300,
-          stop_sequences: ['Human:'],
         }),
       };
     } else if (model.startsWith('mistral')) {
@@ -114,6 +119,9 @@ export class BedrockAdapter {
         }),
         `<s>[INST] ${content} [/INST]`,
       ].join('\n\n');
+      console.info(`-------------------------`);
+      console.info(`Prompt:\n${prompt}`);
+      console.info(`-------------------------`);
       return {
         responseExtract: (data) => data.outputs?.[0]?.text,
         body: JSON.stringify({
